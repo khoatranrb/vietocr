@@ -19,7 +19,7 @@ class ImgAugTransform:
         sometimes(iaa.AddToHueAndSaturation(value=(-10, 10), per_channel=True)),
         sometimes(iaa.SigmoidContrast(gain=(3, 10), cutoff=(0.4, 0.6), per_channel=True)),
         sometimes(iaa.Invert(0.25, per_channel=0.5)),
-        sometimes(iaa.Solarize(0.5, threshold=(32, 128))),
+#         sometimes(iaa.Solarize(0.5, threshold=(32, 128))),
         sometimes(iaa.Dropout2d(p=0.5)),
         sometimes(iaa.Multiply((0.5, 1.5), per_channel=0.5)),
         sometimes(iaa.Add((-40, 40), per_channel=0.5)),
