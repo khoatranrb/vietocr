@@ -58,9 +58,6 @@ class Trainer():
         if pretrained:
             weight_file = download_weights(**config['pretrain'], quiet=config['quiet'])
             self.load_weights(weight_file)
-        if self.checkpoint:
-            self.load_checkpoint(self.checkpoint)
-            print(self.checkpoint, 'loaded')
 
         self.iter = 0
         
@@ -85,6 +82,9 @@ class Trainer():
                     self.data_root, self.valid_annotation, masked_language_model=False)
 
         self.train_losses = []
+        if self.checkpoint:
+            self.load_checkpoint(self.checkpoint)
+            print(self.checkpoint, 'loaded')
         
     def train(self):
         total_loss = 0
