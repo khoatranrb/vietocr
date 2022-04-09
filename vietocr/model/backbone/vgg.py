@@ -5,6 +5,7 @@ from einops import rearrange
 from torchvision.models._utils import IntermediateLayerGetter
 import numpy as np
 import math
+import random
 
 class Step(nn.Module):
     def __init__(self, module, alpha=0.99, eps=1e-8):
