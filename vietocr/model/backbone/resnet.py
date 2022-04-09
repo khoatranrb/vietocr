@@ -18,14 +18,14 @@ class Step(nn.Module):
 
     def forward(self, inp=None):
         try:
-            self.xxx = self.xxx*1.1-0.1*((self.x.grad*(inp-self.x))>0).sum().item()/np.prod(list(inp.size()))
+            self.xxx = self.xxx*0.9+0.1*(1-((self.x.grad*(inp-self.x))>0).sum().item()/np.prod(list(inp.size())))
         except: pass
         self.x = nn.Parameter(inp)
         out1 = self.mod(self.x)
         out2 = self.mod(inp)
         scale = math.sqrt(float(self.xxx))
-#         if random.random() < 0.001:
-#             print(scale)
+        if random.random() < 0.0001:
+            print(scale)
         return scale*out2+out1*(1-scale)
 
 class BasicBlock(nn.Module):
