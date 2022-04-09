@@ -58,9 +58,9 @@ class Trainer():
         if pretrained:
             weight_file = download_weights(**config['pretrain'], quiet=config['quiet'])
             self.load_weights(weight_file)
-	if self.checkpoint:
-	    self.load_checkpoint(self.checkpoint)
-	    print(self.checkpoint, 'loaded')
+        if self.checkpoint:
+            self.load_checkpoint(self.checkpoint)
+            print(self.checkpoint, 'loaded')
 
         self.iter = 0
         
