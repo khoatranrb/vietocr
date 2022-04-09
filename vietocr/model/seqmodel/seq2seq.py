@@ -2,6 +2,8 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
+import numpy as np
+import math
 
 class Step(nn.Module):
     def __init__(self, module, alpha=0.99, eps=1e-8):
