@@ -12,12 +12,12 @@ class Step(nn.Module):
         super(Step, self).__init__()
         self.x = None
         self.mod = module
-        self.xxx = 0.5
+        self.xxx = 0.7
 
     def forward(self, inp=None):
-        try:
-            self.xxx = self.xxx*0.9+0.1*(1-((self.x.grad*(inp-self.x))>0).sum().item()/np.prod(list(inp.size())))
-        except: pass
+#         try:
+#             self.xxx = self.xxx*0.9+0.1*(1-((self.x.grad*(inp-self.x))>0).sum().item()/np.prod(list(inp.size())))
+#         except: pass
         self.x = nn.Parameter(inp)
         out1 = self.mod(self.x)
         out2 = self.mod(inp)
