@@ -60,6 +60,7 @@ class Trainer():
             self.load_weights(weight_file)
 	if self.checkpoint:
 	    self.load_checkpoint(self.checkpoint)
+	    print(self.checkpoint, 'loaded')
 
         self.iter = 0
         
