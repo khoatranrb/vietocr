@@ -3,12 +3,31 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 
+class Step(nn.Module):
+    def __init__(self, module, alpha=0.99, eps=1e-8):
+        super(Step, self).__init__()
+        self.x = None
+        self.mod = module
+        self.xxx = 0.5
+
+    def forward(self, inp=None):
+        try:
+            self.xxx = self.xxx*0.9+0.1*(1-((self.x.grad*(inp-self.x))>0).sum().item()/np.prod(list(inp.size())))
+        except: pass
+        self.x = nn.Parameter(inp)
+        out1 = self.mod(self.x)
+        out2 = self.mod(inp)
+        scale = math.sqrt(float(self.xxx))
+        if random.random() < 0.0001:
+            print(scale)
+        return scale*out2+out1*(1-scale)
+
 class Encoder(nn.Module):
     def __init__(self, emb_dim, enc_hid_dim, dec_hid_dim, dropout):
         super().__init__()
                 
         self.rnn = nn.GRU(emb_dim, enc_hid_dim, bidirectional = True)
-        self.fc = nn.Linear(enc_hid_dim * 2, dec_hid_dim)
+        self.fc = Step(nn.Linear(enc_hid_dim * 2, dec_hid_dim))
         self.dropout = nn.Dropout(dropout)
         
     def forward(self, src):
@@ -30,8 +49,8 @@ class Attention(nn.Module):
     def __init__(self, enc_hid_dim, dec_hid_dim):
         super().__init__()
         
-        self.attn = nn.Linear((enc_hid_dim * 2) + dec_hid_dim, dec_hid_dim)
-        self.v = nn.Linear(dec_hid_dim, 1, bias = False)
+        self.attn = Step(nn.Linear((enc_hid_dim * 2) + dec_hid_dim, dec_hid_dim))
+        self.v = Step(nn.Linear(dec_hid_dim, 1, bias = False))
         
     def forward(self, hidden, encoder_outputs):
         """
@@ -62,7 +81,7 @@ class Decoder(nn.Module):
         
         self.embedding = nn.Embedding(output_dim, emb_dim)
         self.rnn = nn.GRU((enc_hid_dim * 2) + emb_dim, dec_hid_dim)
-        self.fc_out = nn.Linear((enc_hid_dim * 2) + dec_hid_dim + emb_dim, output_dim)
+        self.fc_out =Step( nn.Linear((enc_hid_dim * 2) + dec_hid_dim + emb_dim, output_dim))
         self.dropout = nn.Dropout(dropout)
         
     def forward(self, input, hidden, encoder_outputs):
