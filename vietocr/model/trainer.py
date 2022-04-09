@@ -135,6 +135,7 @@ class Trainer():
 
                 if acc_full_seq > best_acc:
                     self.save_weights(self.export_weights)
+                    self.save_checkpoint(self.checkpoint[:-4]+'_b.pth')
                     best_acc = acc_full_seq
 
             
